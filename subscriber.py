@@ -15,8 +15,6 @@ auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
 twillio_phone_num = os.environ.get('PHONE_NUM')
 
 ##connect to technician SMS
-account_sid = 'AC449cd38d5671f268536f968327338433'
-auth_token = 'c5e337451eb40dc7dfc7fd38c5132e2e'
 client = Client()
 
 ##connect to SQLite
