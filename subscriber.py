@@ -9,10 +9,14 @@ from dotenv import load_dotenv
 ##load variables from .env
 load_dotenv()
 
-#access variables
+#access twilio variables
 account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
 auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
-twillio_phone_num = os.environ.get('PHONE_NUM')
+twilio_phone_num = os.environ.get('PHONE_NUM')
+
+#access mosquitto username and password
+mosquitto_username = os.environ.get('MOSQUITTO_USER_NAME')
+mosquitto_password = os.environ.get('MOSQUITTO_PASSWORD')
 
 ##connect to technician SMS
 client = Client()
@@ -35,7 +39,7 @@ def send_technician_SMS():
         #attempt message
         message = client.message.create(
             body = "Network closet environment unstable"
-            from_=twillio_phone_num
+            from_ = twilio_phone_num
             to="+13154123162"
         )
 
@@ -89,9 +93,11 @@ def on_message(client, userdata, message):
             humiidity = None
 
 ##connect client to broker and subscribe to temp/humidity data
-broker = "mqtt.eclipseprojects.io"
+broker = "localhost"
+port = "1883"
 client = mqtt.Client("Subscriber")
-client.connect(broker)
+client.username_pw_set(mosquitto_username, mosquitto_password)
+client.connect(broker, port)
 client.subscribe("home/temp")
 client.subscribe("home/humidity")
 client.on_message = on_message
